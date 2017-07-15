@@ -1,6 +1,9 @@
 ﻿#include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
+#include <sstream>
+#include <ctype.h>
 
 #include <gtest\gtest.h>
 
@@ -14,12 +17,48 @@ using namespace std;
 //
 // return 0 if success, (empty string)
 //       -1 if exception occur (ex. string containing non-digit character)
-int getAscendingStr(string& inputStr)
+int getAscendingStr(string &inputStr)
 {
-	
-	/// Please fill your code here
+	stringstream ss(inputStr);
+	string subStr;
+	vector<string> vArr;
 
+	for (int i = 0; i < inputStr.length(); i++)
+	{
+		if (!(isdigit(inputStr[i]) || inputStr[i] == ' ' || inputStr[i] == '-'))
+			return -1;
+	}
 
+	while (getline(ss, subStr, ' '))
+		vArr.push_back(subStr);
+
+	int size = vArr.size();
+	string hold;
+
+	for (int pass = 0; pass < size; pass++)
+	{
+		for (int i = 0; i < size - 1; i++)
+		{
+			if (atoi(vArr[i].c_str()) > atoi(vArr[i + 1].c_str()))
+			{
+				hold = vArr[i];
+				vArr[i] = vArr[i + 1];
+				vArr[i + 1] = hold;
+			}
+		}
+	}
+
+	string result = "";
+	for (int i = 0; i < size; i++)
+	{
+		result = result + vArr[i];
+		if (i != size - 1)
+		{
+			result = result + " ";
+		}
+	}
+
+	inputStr = result;
 	return 0;
 }
 
@@ -36,8 +75,28 @@ int getAscendingStr(string& inputStr)
 //          (return vector size should be 0)
 int solveQ(vector<double> &x, double a, double b, double c)
 {
+	if (b*b-4*a*c > 0)
+	{
+		double root1 = 0, root2 = 0;
 
-	return 0;
+		root1 = (-b + sqrt(b*b - 4 * a*c)) / 2 * a;
+		root2 = (-b - sqrt(b*b - 4 * a*c)) / 2 * a;
+		x.push_back(root1);
+		x.push_back(root2);
+		return 1;
+	}
+	else if (b*b-4*a*c == 0)
+	{
+		double  root = 0;
+
+		root = -b / 2 * a;
+		x.push_back(root);
+		return 0;
+	}
+	else if (b*b - 4 * a*c < 0)
+	{	
+		return -1;
+	}
 }
 
 int main(int argc, char*argv[]) {
