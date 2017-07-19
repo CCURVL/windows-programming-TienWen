@@ -1,10 +1,10 @@
 ﻿#include <iostream>
 #include <string>
-#include <vector>
-#include <cmath>
-#include <sstream>
 #include <ctype.h>
-
+#include <sstream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
 #include <gtest\gtest.h>
 
 using namespace std;
@@ -21,38 +21,31 @@ int getAscendingStr(string &inputStr)
 {
 	stringstream ss(inputStr);
 	string subStr;
-	vector<string> vArr;
+	vector<int> vArr;
 
 	for (int i = 0; i < inputStr.length(); i++)
 	{
-		if (!(isdigit(inputStr[i]) || inputStr[i] == ' ' || inputStr[i] == '-'))
+		if (!(isdigit(inputStr[i]) || inputStr[i] == ' ' || inputStr[i] == '+' || inputStr[i] == '-'))
 			return -1;
 	}
 
 	while (getline(ss, subStr, ' '))
-		vArr.push_back(subStr);
-
-	int size = vArr.size();
-	string hold;
-
-	for (int pass = 0; pass < size; pass++)
 	{
-		for (int i = 0; i < size - 1; i++)
-		{
-			if (atoi(vArr[i].c_str()) > atoi(vArr[i + 1].c_str()))
-			{
-				hold = vArr[i];
-				vArr[i] = vArr[i + 1];
-				vArr[i + 1] = hold;
-			}
-		}
+		stringstream s(subStr);
+		int number = 0;
+		s >> number;
+		vArr.push_back(number);
 	}
+	
+	sort(vArr.begin(), vArr.end());
 
 	string result = "";
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < vArr.size(); i++)
 	{
-		result = result + vArr[i];
-		if (i != size - 1)
+		stringstream s;
+		s << vArr[i];
+		result = result + s.str();
+		if (i != vArr.size() - 1)
 		{
 			result = result + " ";
 		}
